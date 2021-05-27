@@ -3,7 +3,7 @@ import axios from "axios";
 import moment from "moment";
 
 import { useDispatch } from "react-redux";
-import { startLoading, postsFetched } from "../store/feed/actions";
+import { fetchNext5Posts } from "../store/feed/actions";
 
 import { useSelector } from "react-redux";
 import { selectFeedLoading, selectFeedPosts } from "../store/feed/selectors";
@@ -14,28 +14,10 @@ export default function PostsFeed() {
   const dispatch = useDispatch();
   const dataLoading = useSelector(selectFeedLoading);
   const dataPosts = useSelector(selectFeedPosts);
-  //   const [data, setData] = useState({
-  // loading: true,
-  // posts: [],
-  //   });
-
-  async function fetchNext5Posts() {
-    // setData({ ...data, loading: true });
-    dispatch(startLoading());
-    const res = await axios.get(
-      `${API_URL}?offset=${dataPosts.length}&limit=5`
-    );
-    const morePosts = res.data.rows;
-    dispatch(postsFetched(morePosts));
-    // setData({
-    //   loading: false,
-    //   posts: [...data.posts, ...morePosts],
-    // });
-  }
 
   useEffect(() => {
-    fetchNext5Posts();
-  }, []);
+    dispatch(fetchNext5Posts);
+  }, [dispatch]);
 
   return (
     <div className="PostsFeed">
@@ -60,7 +42,9 @@ export default function PostsFeed() {
       {dataLoading ? (
         <h2>LOADING</h2>
       ) : (
-        <button onClick={fetchNext5Posts}>load next posts</button>
+        <button onClick={() => dispatch(fetchNext5Posts)}>
+          load next posts
+        </button>
       )}
     </div>
   );
