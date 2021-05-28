@@ -9,8 +9,7 @@ export default function reducer(state = initialState, action) {
     }
     case "feed/postsFetched": {
       const newPosts = action.payload;
-      console.log(newPosts);
-      console.log(state.posts);
+
       return { ...state, loading: false, posts: [...state.posts, ...newPosts] };
     }
     default: {

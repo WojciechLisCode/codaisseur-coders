@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { fetchNext5Posts } from "../store/feed/actions";
 
 import { useSelector } from "react-redux";
 import { selectFeedLoading, selectFeedPosts } from "../store/feed/selectors";
-
-const API_URL = `https://codaisseur-coders-network.herokuapp.com/posts`;
 
 export default function PostsFeed() {
   const dispatch = useDispatch();
@@ -27,13 +25,16 @@ export default function PostsFeed() {
           const { title, updatedAt, createdAt, content, id, tags } = post;
           return (
             <div key={id}>
-              <h2>{title}</h2>
-              <p>
-                (id:{id}) {moment(createdAt).format("DD-MM-YYYY")}
-                {tags.map((tag) => (
-                  <b key={id}>{` (${tag.tag}) `}</b>
-                ))}
-              </p>
+              <Link to={`/post/${post.id}`}>
+                {post.title}
+                <h2>{title}</h2>
+                <p>
+                  (id:{id}) {moment(createdAt).format("DD-MM-YYYY")}
+                  {tags.map((tag) => (
+                    <b key={tag.id}>{` (${tag.tag}) `}</b>
+                  ))}
+                </p>
+              </Link>
             </div>
           );
         })}
